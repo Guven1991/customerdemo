@@ -41,7 +41,9 @@ public class CustomerService {
     }
 
     public void deleteCustomerById(Long id){
-
+        if(!customerRepository.existsById(id)){
+            log.error("deleteCustomerById error");
+        }
         customerRepository.deleteById(id);
         log.info("deleteCustomerById is successful");
     }

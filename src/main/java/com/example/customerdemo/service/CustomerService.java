@@ -22,7 +22,10 @@ public class CustomerService {
     CustomerRepository customerRepository;
 
     public CustomerDto getCustomerById(Long id){
-        Customer customer = customerRepository.findById(id).orElse(null);
+        if(!customerRepository.existsById(id)){
+            log.error("customer not found");
+        }
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
         log.info("getCustomerById is successful");
         return dozerBeanMapper.map(customer,CustomerDto.class);
 
@@ -36,7 +39,14 @@ public class CustomerService {
     }
 
     public CustomerDto addCustomer(CustomerDto customerDto) {
+        List<CustomerDto> customerDtoList = getCustomers();
+        String customerDtoName = customerDto.getName();
+        if(isCustomerNameExists(customerDtoName,customerDtoList)){
+            log.error("user already exists");
+            throw new RuntimeException("user already exists");
+        }
         Customer customerReturned = customerRepository.save(dozerBeanMapper.map(customerDto,Customer.class));
+        log.info("customer added");
         return dozerBeanMapper.map(customerReturned,  CustomerDto.class);
     }
 
@@ -46,6 +56,15 @@ public class CustomerService {
         }
         customerRepository.deleteById(id);
         log.info("deleteCustomerById is successful");
+    }
+
+    public boolean isCustomerNameExists(String customerName, List<CustomerDto> customerDtoList){
+        for (CustomerDto customerDto : customerDtoList) {
+            if(customerDto.getName().equals(customerName)){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

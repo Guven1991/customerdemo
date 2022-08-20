@@ -2,7 +2,9 @@ package com.example.customerdemo.controller;
 
 import com.example.customerdemo.dto.CustomerDto;
 import com.example.customerdemo.entity.Customer;
+import com.example.customerdemo.response.GenericResponse;
 import com.example.customerdemo.service.CustomerService;
+import com.example.customerdemo.service.CustomerServiceImpl;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +41,9 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCustomerById(@PathVariable Long id){
+    public GenericResponse deleteCustomerById(@PathVariable Long id){
         customerService.deleteCustomerById(id);
+        return new GenericResponse("Customer Deleted");
     }
 
 }

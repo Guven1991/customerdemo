@@ -3,7 +3,7 @@ package com.example.customerdemo;
 import com.example.customerdemo.dto.CustomerDto;
 import com.example.customerdemo.entity.Customer;
 import com.example.customerdemo.repository.CustomerRepository;
-import com.example.customerdemo.service.CustomerService;
+import com.example.customerdemo.service.CustomerServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class CustomerServiceTest {
     private CustomerRepository customerRepository;
 
     @InjectMocks
-    private CustomerService customerService;
+    private CustomerServiceImpl customerServiceImpl;
 
     Customer customer;
     CustomerDto customerDto;
@@ -50,7 +50,7 @@ public class CustomerServiceTest {
     @Test
     public void getCustomerById(){
         when(customerRepository.findById(1L)).thenReturn(Optional.ofNullable(customer));
-        CustomerDto customerDto = customerService.getCustomerById(1L);
+        CustomerDto customerDto = customerServiceImpl.getCustomerById(1L);
 
         assertEquals(Optional.of(1L),Optional.ofNullable(customerDto.getId()));
         assertEquals("ali",customerDto.getName());
@@ -61,7 +61,7 @@ public class CustomerServiceTest {
     @Test
     public void getCustomers(){
         when(customerRepository.findAll()).thenReturn(List.of(customer));
-        List<CustomerDto> customerList = customerService.getCustomers();
+        List<CustomerDto> customerList = customerServiceImpl.getCustomers();
         assertEquals(1,customerList.size());
         assertEquals("ali",customerList.get(0).getName());
 
@@ -70,7 +70,7 @@ public class CustomerServiceTest {
     @Test
     public void addCustomer(){
         when(customerRepository.save(any())).thenReturn(customer);
-        CustomerDto returnedCustomerDto = customerService.addCustomer(customerDto);
+        CustomerDto returnedCustomerDto = customerServiceImpl.addCustomer(customerDto);
         assertEquals(Optional.of(1L), Optional.ofNullable(returnedCustomerDto.getId()));
         assertEquals("ali",returnedCustomerDto.getName());
         assertEquals("duru",returnedCustomerDto.getSurname());
@@ -79,7 +79,7 @@ public class CustomerServiceTest {
     @Test
     public void deleteCustomerById(){
         when(customerRepository.existsById(any())).thenReturn(true);
-        customerService.deleteCustomerById(1L);
+        customerServiceImpl.deleteCustomerById(1L);
         verify(customerRepository).deleteById(1L);
     }
 

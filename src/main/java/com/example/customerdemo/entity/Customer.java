@@ -15,7 +15,7 @@ public class Customer {
     private Long id;
     private String name;
     private String surname;
-    private String Location;
+    private String location;
 
     public Long getId() {
         return id;
@@ -42,10 +42,10 @@ public class Customer {
     }
 
     public String getLocation() {
-        return Location;
+        return location;
     }
 
     public void setLocation(String location) {
-        Location = location;
+        this.location = location;
     }
 }

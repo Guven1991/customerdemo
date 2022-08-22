@@ -5,7 +5,7 @@ import com.example.customerdemo.dto.UserDataDTO;
 import com.example.customerdemo.dto.UserResponseDTO;
 import com.example.customerdemo.entity.AppUser;
 import com.example.customerdemo.service.UserService;
-import org.dozer.DozerBeanMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    DozerBeanMapper modelMapper = new DozerBeanMapper();
+    ModelMapper modelMapper = new ModelMapper();
 
     @PostMapping("/signin")
     public AppUser login(@RequestBody AppUser appUser) {

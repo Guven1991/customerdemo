@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping
+@RequestMapping("customer")
 public class CustomerController {
 
     DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
@@ -30,7 +30,7 @@ public class CustomerController {
         return ResponseEntity.ok(dozerBeanMapper.map(customerService.getCustomerById(id),Customer.class));
     }
 
-    @GetMapping
+    @GetMapping("customers")
     public  ResponseEntity<Page<Customer>> getCustomers(Pageable pageable){
         Page<CustomerDto> customerDtoList = customerService.getCustomers(pageable);
         return ResponseEntity.ok(customerDtoList.map(customerDto ->

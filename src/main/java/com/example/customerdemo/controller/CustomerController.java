@@ -37,6 +37,13 @@ public class CustomerController {
                 dozerBeanMapper.map(customerDto,Customer.class)));
     }
 
+    @GetMapping()
+    public  ResponseEntity<List<Customer>> getCustomers(){
+        List<CustomerDto> customerDtoList = customerService.getCustomers();
+        return ResponseEntity.ok(customerDtoList.stream().map(customerDto ->
+                dozerBeanMapper.map(customerDto,Customer.class)).collect(Collectors.toList()));
+    }
+
     @GetMapping("location/{location}")
     public  ResponseEntity<Page<Customer>> getCustomersByLocation(@PathVariable String location, Pageable pageable){
         Page<CustomerDto> customerDtoList = customerService.getCustomersByLocation(location, pageable);
@@ -45,9 +52,9 @@ public class CustomerController {
     }
 
     @PostMapping("add-customer")
-    public  ResponseEntity<Customer> addCustomer(@RequestBody Customer customer,Pageable pageable) throws IOException {
+    public  ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) throws IOException {
         CustomerDto customerDto = dozerBeanMapper.map(customer,CustomerDto.class);
-        return ResponseEntity.ok(dozerBeanMapper.map(customerService.addCustomer(customerDto,pageable), Customer.class));
+        return ResponseEntity.ok(dozerBeanMapper.map(customerService.addCustomer(customerDto), Customer.class));
     }
 
     @DeleteMapping("delete-customer/{id}")

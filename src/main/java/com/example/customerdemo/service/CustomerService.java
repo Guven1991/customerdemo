@@ -11,7 +11,8 @@ public interface CustomerService {
 
     CustomerDto getCustomerById(Long id);
     Page<CustomerDto> getCustomers(Pageable pageable);
+    List<CustomerDto> getCustomers();
     Page<CustomerDto> getCustomersByLocation(String location,Pageable pageable);
-    CustomerDto addCustomer(CustomerDto customerDto,Pageable pageable) throws IOException;
+    CustomerDto addCustomer(CustomerDto customerDto) throws IOException;
     void deleteCustomerById(Long id);
 }

@@ -52,6 +52,12 @@ public class CustomerServiceImpl implements CustomerService{
                 dozerBeanMapper.map(customer,CustomerDto.class));
     }
 
+    public List<CustomerDto> getCustomers(){
+        List<Customer> customerList= customerRepository.findAll();
+        return customerList.stream().map(customer ->
+                dozerBeanMapper.map(customer,CustomerDto.class)).collect(Collectors.toList());
+    }
+
     @Override
     public Page<CustomerDto> getCustomersByLocation(String location, Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().isEmpty() ? Sort.by("name").ascending() : pageable.getSort());
@@ -63,13 +69,16 @@ public class CustomerServiceImpl implements CustomerService{
 
 
     @Override
-    public CustomerDto addCustomer(CustomerDto customerDto,Pageable pageable) throws IOException {
-        Page<CustomerDto> customerDtoList = getCustomers(pageable);
+    public CustomerDto addCustomer(CustomerDto customerDto) throws IOException {
+        List<CustomerDto> customerDtoList = getCustomers();
         String customerDtoName = customerDto.getName();
         if(isCustomerNameExists(customerDtoName,customerDtoList)){
             log.error("Kullanıcı adı kayıtlı");
             throw new IOException("Kullanıcı adı kayıtlı");
         }
+        customerDto.setName(customerDto.getName().toLowerCase().trim());
+        customerDto.setSurname(customerDto.getSurname().toLowerCase().trim());
+        customerDto.setLocation(customerDto.getLocation().toLowerCase().trim());
         Customer customerReturned = customerRepository.save(dozerBeanMapper.map(customerDto,Customer.class));
         log.info("Müşteri eklendi");
         return dozerBeanMapper.map(customerReturned,  CustomerDto.class);
@@ -84,7 +93,7 @@ public class CustomerServiceImpl implements CustomerService{
         log.info("Müşteri silindi");
     }
 
-    public boolean isCustomerNameExists(String customerName, Page<CustomerDto> customerDtoList){
+    public boolean isCustomerNameExists(String customerName, List<CustomerDto> customerDtoList){
         for (CustomerDto customerDto : customerDtoList) {
             if(customerDto.getName().equals(customerName)){
                 return true;

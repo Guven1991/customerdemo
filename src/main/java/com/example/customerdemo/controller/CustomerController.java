@@ -4,7 +4,6 @@ import com.example.customerdemo.dto.CustomerDto;
 import com.example.customerdemo.entity.Customer;
 import com.example.customerdemo.response.GenericResponse;
 import com.example.customerdemo.service.CustomerService;
-import com.example.customerdemo.service.CustomerServiceImpl;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,15 +25,22 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id){
-        return ResponseEntity.ok(dozerBeanMapper.map(customerService.getCustomerById(id),Customer.class));
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        return ResponseEntity.ok(dozerBeanMapper.map(customerService.getCustomerById(id), Customer.class));
     }
 
+//    @GetMapping("customers")
+//    public  ResponseEntity<Page<Customer>> getCustomers(Pageable pageable){
+//        Page<CustomerDto> customerDtoList = customerService.getCustomers(pageable);
+//        return ResponseEntity.ok(customerDtoList.map(customerDto ->
+//                dozerBeanMapper.map(customerDto,Customer.class)));
+//    }
+
     @GetMapping("customers")
-    public  ResponseEntity<Page<Customer>> getCustomers(Pageable pageable){
-        Page<CustomerDto> customerDtoList = customerService.getCustomers(pageable);
+    public ResponseEntity<Page<Customer>> getCustomersWithSort(Pageable pageable, @RequestParam Boolean isDesc, @RequestParam String sortField) {
+        Page<CustomerDto> customerDtoList = customerService.getCustomersWithSort(pageable, isDesc, sortField);
         return ResponseEntity.ok(customerDtoList.map(customerDto ->
-                dozerBeanMapper.map(customerDto,Customer.class)));
+                dozerBeanMapper.map(customerDto, Customer.class)));
     }
 
     @GetMapping()
@@ -44,21 +50,21 @@ public class CustomerController {
                 dozerBeanMapper.map(customerDto,Customer.class)).collect(Collectors.toList()));
     }
 
-    @GetMapping("location/{location}")
-    public  ResponseEntity<Page<Customer>> getCustomersByLocation(@PathVariable String location, Pageable pageable){
+    @GetMapping("location")
+    public ResponseEntity<Page<Customer>> getCustomersByLocation(@RequestParam String location, Pageable pageable) {
         Page<CustomerDto> customerDtoList = customerService.getCustomersByLocation(location, pageable);
         return ResponseEntity.ok(customerDtoList.map(customerDto ->
-                dozerBeanMapper.map(customerDto,Customer.class)));
+                dozerBeanMapper.map(customerDto, Customer.class)));
     }
 
     @PostMapping("add-customer")
-    public  ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) throws IOException {
-        CustomerDto customerDto = dozerBeanMapper.map(customer,CustomerDto.class);
+    public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) throws IOException {
+        CustomerDto customerDto = dozerBeanMapper.map(customer, CustomerDto.class);
         return ResponseEntity.ok(dozerBeanMapper.map(customerService.addCustomer(customerDto), Customer.class));
     }
 
     @DeleteMapping("delete-customer/{id}")
-    public GenericResponse deleteCustomerById(@PathVariable Long id){
+    public GenericResponse deleteCustomerById(@PathVariable Long id) {
         customerService.deleteCustomerById(id);
         return new GenericResponse("Customer Deleted");
     }

@@ -1,10 +1,11 @@
-package com.example.customerdemo.service;
+package com.example.customerdemo.serviceImpl;
 
 
 import com.example.customerdemo.entity.AppUser;
 import com.example.customerdemo.exception.CustomException;
 import com.example.customerdemo.repository.UserRepository;
 import com.example.customerdemo.security.JwtTokenProvider;
+import com.example.customerdemo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

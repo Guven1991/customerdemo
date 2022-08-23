@@ -3,19 +3,14 @@ package com.example.customerdemo;
 import com.example.customerdemo.dto.CustomerDto;
 import com.example.customerdemo.entity.Customer;
 import com.example.customerdemo.repository.CustomerRepository;
-import com.example.customerdemo.service.CustomerServiceImpl;
+import com.example.customerdemo.serviceImpl.CustomerServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;

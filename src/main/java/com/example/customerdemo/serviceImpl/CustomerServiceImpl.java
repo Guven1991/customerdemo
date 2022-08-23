@@ -1,8 +1,9 @@
-package com.example.customerdemo.service;
+package com.example.customerdemo.serviceImpl;
 
 import com.example.customerdemo.dto.CustomerDto;
 import com.example.customerdemo.entity.Customer;
 import com.example.customerdemo.repository.CustomerRepository;
+import com.example.customerdemo.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class CustomerServiceImpl implements CustomerService{
+public class CustomerServiceImpl implements CustomerService {
 
     DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
@@ -27,8 +28,8 @@ public class CustomerServiceImpl implements CustomerService{
     CustomerRepository customerRepository;
 
     @Override
-    public CustomerDto getCustomerById(Long id){
-        if(!customerRepository.existsById(id)){
+    public CustomerDto getCustomerById(Long id) {
+        if (!customerRepository.existsById(id)) {
             log.error("müşteri bulunamadı");
         }
         Customer customer = null;
@@ -40,16 +41,28 @@ public class CustomerServiceImpl implements CustomerService{
         }
 
         log.info("getCustomerById is successful");
-        return dozerBeanMapper.map(customer,CustomerDto.class);
+        return dozerBeanMapper.map(customer, CustomerDto.class);
 
     }
 
-    @Override
-    public Page<CustomerDto> getCustomers(Pageable pageable){
-        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().isEmpty() ? Sort.by("name").ascending() : pageable.getSort());
-        Page<Customer> customerList= customerRepository.findAll(customPageable);
+//    @Override
+//    public Page<CustomerDto> getCustomers(Pageable pageable){
+//        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().isEmpty() ? Sort.by("name").ascending() : pageable.getSort());
+//        Page<Customer> customerList= customerRepository.findAll(customPageable);
+//        return customerList.map(customer ->
+//                dozerBeanMapper.map(customer,CustomerDto.class));
+//    }
+
+
+    public Page<CustomerDto> getCustomersWithSort(Pageable pageable, Boolean isDesc, String sortField) {
+
+
+        Sort sort = isDesc ? Sort.by(sortField).descending() : Sort.by(sortField).ascending();
+
+        Pageable customPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Customer> customerList = customerRepository.findAll(customPageable);
         return customerList.map(customer ->
-                dozerBeanMapper.map(customer,CustomerDto.class));
+                dozerBeanMapper.map(customer, CustomerDto.class));
     }
 
     public List<CustomerDto> getCustomers(){
@@ -61,10 +74,10 @@ public class CustomerServiceImpl implements CustomerService{
     @Override
     public Page<CustomerDto> getCustomersByLocation(String location, Pageable pageable) {
         Pageable customPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().isEmpty() ? Sort.by("name").ascending() : pageable.getSort());
-        Page<Customer> customersByLocationList= customerRepository.findCustomersByLocation(location, customPageable);
+        Page<Customer> customersByLocationList = customerRepository.findCustomersByLocation(location, customPageable);
 
         return customersByLocationList.map(customer ->
-                dozerBeanMapper.map(customer,CustomerDto.class));
+                dozerBeanMapper.map(customer, CustomerDto.class));
     }
 
 
@@ -72,30 +85,30 @@ public class CustomerServiceImpl implements CustomerService{
     public CustomerDto addCustomer(CustomerDto customerDto) throws IOException {
         List<CustomerDto> customerDtoList = getCustomers();
         String customerDtoName = customerDto.getName();
-        if(isCustomerNameExists(customerDtoName,customerDtoList)){
+        if (isCustomerNameExists(customerDtoName, customerDtoList)) {
             log.error("Kullanıcı adı kayıtlı");
             throw new IOException("Kullanıcı adı kayıtlı");
         }
-        customerDto.setName(customerDto.getName().toLowerCase().trim());
-        customerDto.setSurname(customerDto.getSurname().toLowerCase().trim());
-        customerDto.setLocation(customerDto.getLocation().toLowerCase().trim());
-        Customer customerReturned = customerRepository.save(dozerBeanMapper.map(customerDto,Customer.class));
+//        customerDto.setName(customerDto.getName().toLowerCase().trim());
+//        customerDto.setSurname(customerDto.getSurname().toLowerCase().trim());
+//        customerDto.setLocation(customerDto.getLocation().toLowerCase().trim());
+        Customer customerReturned = customerRepository.save(dozerBeanMapper.map(customerDto, Customer.class));
         log.info("Müşteri eklendi");
-        return dozerBeanMapper.map(customerReturned,  CustomerDto.class);
+        return dozerBeanMapper.map(customerReturned, CustomerDto.class);
     }
 
     @Override
-    public void deleteCustomerById(Long id){
-        if(!customerRepository.existsById(id)){
+    public void deleteCustomerById(Long id) {
+        if (!customerRepository.existsById(id)) {
             log.error("Müşteri silinemedi!!!");
         }
         customerRepository.deleteById(id);
         log.info("Müşteri silindi");
     }
 
-    public boolean isCustomerNameExists(String customerName, List<CustomerDto> customerDtoList){
+    public boolean isCustomerNameExists(String customerName, List<CustomerDto> customerDtoList) {
         for (CustomerDto customerDto : customerDtoList) {
-            if(customerDto.getName().equals(customerName)){
+            if (customerDto.getName().equals(customerName)) {
                 return true;
             }
         }

@@ -2,6 +2,7 @@ package com.example.customerdemo.serviceImpl;
 
 
 import com.example.customerdemo.entity.AppUser;
+import com.example.customerdemo.entity.AppUserRole;
 import com.example.customerdemo.exception.CustomException;
 import com.example.customerdemo.repository.UserRepository;
 import com.example.customerdemo.security.JwtTokenProvider;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 
 @Service
@@ -61,25 +63,25 @@ public class UserServiceImpl implements UserService {
 //        userRepository.updateUserRole(username, AppUserRole.ADMIN);
 //    }
 
-    @Override
-    public void delete(String username) {
-        userRepository.deleteByUsername(username);
-    }
-    @Override
-    public AppUser search(String username) {
-        AppUser appUser = userRepository.findByUsername(username);
-        if (appUser == null) {
-            throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
-        }
-        return appUser;
-    }
-    @Override
-    public AppUser whoami(HttpServletRequest req) {
-        return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
-    }
-    @Override
-    public String refresh(String username) {
-        return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
-    }
+//    @Override
+//    public void delete(String username) {
+//        userRepository.deleteByUsername(username);
+//    }
+//    @Override
+//    public AppUser search(String username) {
+//        AppUser appUser = userRepository.findByUsername(username);
+//        if (appUser == null) {
+//            throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
+//        }
+//        return appUser;
+//    }
+//    @Override
+//    public AppUser whoami(HttpServletRequest req) {
+//        return userRepository.findByUsername(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+//    }
+//    @Override
+//    public String refresh(String username) {
+//        return jwtTokenProvider.createToken(username, userRepository.findByUsername(username).getAppUserRoles());
+//    }
 
 }

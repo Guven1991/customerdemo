@@ -33,29 +33,29 @@ public class UserController {
         return userService.signup(modelMapper.map(user, AppUser.class));
     }
 
-    @DeleteMapping(value = "/{username}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String delete(@PathVariable String username) {
-        userService.delete(username);
-        return username;
-    }
+//    @DeleteMapping("/{username}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public void delete(@PathVariable String username) {
+//        userService.delete(username);
+//
+//    }
 
-    @GetMapping(value = "/{username}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public UserResponseDTO search(@PathVariable String username) {
-        return modelMapper.map(userService.search(username), UserResponseDTO.class);
-    }
+//    @GetMapping(value = "/{username}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public UserResponseDTO search(@PathVariable String username) {
+//        return modelMapper.map(userService.search(username), UserResponseDTO.class);
+//    }
+//
+//    @GetMapping(value = "/me")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    public UserResponseDTO whoami(HttpServletRequest req) {
+//                return modelMapper.map(userService.whoami(req), UserResponseDTO.class);
+//    }
 
-    @GetMapping(value = "/me")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public UserResponseDTO whoami(HttpServletRequest req) {
-        return modelMapper.map(userService.whoami(req), UserResponseDTO.class);
-    }
-
-    @GetMapping("/refresh")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public String refresh(HttpServletRequest req) {
-        return userService.refresh(req.getRemoteUser());
-    }
+//    @GetMapping("/refresh")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    public String refresh(HttpServletRequest req) {
+//        return userService.refresh(req.getRemoteUser());
+//    }
 
 }

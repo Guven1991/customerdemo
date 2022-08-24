@@ -4,6 +4,7 @@ package com.example.customerdemo.service;
 import com.example.customerdemo.entity.AppUser;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 public interface UserService {
     public AppUser signin(AppUser appUser);
@@ -11,9 +12,9 @@ public interface UserService {
 
 //    @Transactional
 //    void makeAdmin(String username);
-
-    public void delete(String username);
-    public AppUser search(String username);
-    public AppUser whoami(HttpServletRequest req);
-    public String refresh(String username);
+//
+////    public void delete(String username);
+//    public AppUser search(String username);
+//    public AppUser whoami(HttpServletRequest req);
+//    public String refresh(String username);
 }

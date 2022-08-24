@@ -40,7 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
             e.printStackTrace();
         }
 
-        log.info("getCustomerById is successful");
+        log.info(id +" id'li müşteri başarıyla getirildi");
         return dozerBeanMapper.map(customer, CustomerDto.class);
 
     }

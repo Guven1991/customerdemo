@@ -21,6 +21,7 @@ public class UserDataDTO {
   private String email;
 
   private String password;
+
   List<AppUserRole> appUserRoles;
 
   public String getUsername() {

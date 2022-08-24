@@ -36,14 +36,14 @@ public class CustomerController {
 //                dozerBeanMapper.map(customerDto,Customer.class)));
 //    }
 
-    @GetMapping("customers")
+    @GetMapping("customers/sort")
     public ResponseEntity<Page<Customer>> getCustomersWithSort(Pageable pageable, @RequestParam Boolean isDesc, @RequestParam String sortField) {
         Page<CustomerDto> customerDtoList = customerService.getCustomersWithSort(pageable, isDesc, sortField);
         return ResponseEntity.ok(customerDtoList.map(customerDto ->
                 dozerBeanMapper.map(customerDto, Customer.class)));
     }
 
-    @GetMapping()
+    @GetMapping("customers")
     public  ResponseEntity<List<Customer>> getCustomers(){
         List<CustomerDto> customerDtoList = customerService.getCustomers();
         return ResponseEntity.ok(customerDtoList.stream().map(customerDto ->

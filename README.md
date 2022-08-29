@@ -1,4 +1,4 @@
-#Customer Demo Project
+# Customer Demo Project
 
 This project I made for 32 bit is a demo project where we can register customers, fetch that customer by customer ID, fetch all customers so that they can be paginated, sorted and filtered, and we can delete the customer.
 
